@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `cache` (
 
 ## Preview of Test Cases
 
-![Image]()
+![Image](https://preview.ibb.co/gmyG0q/Screen-Shot-2018-10-23-at-10-03-24-PM.png)
 
 ## Contributing
 
