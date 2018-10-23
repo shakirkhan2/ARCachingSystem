@@ -1,6 +1,6 @@
 # Adaptive Replacement Caching system
 This cache system is initialized with an integer, which defines the maximum number of keys which your caching system should store. A full cache occurs when number of keys reaches this.
-https://en.wikipedia.org/wiki/Adaptive_replacement_cache
+Reference: https://en.wikipedia.org/wiki/Adaptive_replacement_cache
 
 
 ### Prerequisites
@@ -36,7 +36,6 @@ Use databse
 
 ```
 use arcache;
-
 ```
 
 Create User
