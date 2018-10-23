@@ -5,6 +5,7 @@ This cache system is initialized with an integer, which defines the maximum numb
 ### Prerequisites
 * jdk (>=1.7 required)
 * mysql (>=5.7 required)
+* External Library (mysql-connector)
 
 
 ### Installing
