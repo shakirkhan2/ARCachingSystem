@@ -20,6 +20,11 @@ public class DatabaseConnection {
         getConnection();
     }
 
+    /**
+     * Get database connection
+     *
+     * @return connection
+     */
     public static Connection getConnection() {
         if (connection != null) {
             return connection;
@@ -37,6 +42,11 @@ public class DatabaseConnection {
         return connection;
     }
 
+    /**
+     * Close database connection
+     *
+     * @return void
+     */
     public static void closeConnection() {
         if (connection != null) {
             try {
@@ -48,6 +58,13 @@ public class DatabaseConnection {
         connection = null;
     }
 
+    /**
+     * Insert page in database
+     *
+     * @param page page
+     * @throws SQLException
+     * @return void
+     */
     public void insertPageIntoDatabase(Page page) throws SQLException {
         PreparedStatement ps = getConnection().prepareStatement("INSERT into " + DB_TABLE_NAME + " VALUES (?, ?)");
         ps.setInt(1, page.getPageId());
@@ -55,7 +72,14 @@ public class DatabaseConnection {
         ps.executeUpdate();
     }
 
-    public boolean checkIfPageExistsInDatabase(Page page) throws SQLException {
+    /**
+     * Check existence of page in database based on pageId and pageValue
+     *
+     * @param page page
+     * @throws SQLException
+     * @return void
+     */
+    public boolean checkExistenceOfPage(Page page) throws SQLException {
         Statement statement = getConnection().createStatement();
         ResultSet rs = statement.executeQuery("SELECT  * from " + DB_TABLE_NAME + " WHERE  pageId = " + page.getPageId());
 
@@ -66,6 +90,13 @@ public class DatabaseConnection {
         return exists;
     }
 
+    /**
+     * Update page in database
+     *
+     * @param page page
+     * @throws SQLException
+     * @return void
+     */
     public void updatePageInDatabase(Page page) throws SQLException {
         PreparedStatement ps = getConnection().prepareStatement("UPDATE " + DB_TABLE_NAME + " SET pageValue=? WHERE pageId=?");
         ps.setInt(1, page.getPageValue());
@@ -73,8 +104,15 @@ public class DatabaseConnection {
         ps.executeUpdate();
     }
 
-    public void saveUpdate(Page page) throws SQLException {
-        if (checkIfPageExistsInDatabase(page)) {
+    /**
+     * Insert or update page data in database
+     *
+     * @param page page
+     * @throws SQLException
+     * @return void
+     */
+    public void save(Page page) throws SQLException {
+        if (checkExistenceOfPage(page)) {
             updatePageInDatabase(page);
         } else {
             insertPageIntoDatabase(page);

@@ -35,26 +35,39 @@ public class ARCAlgorithm {
         this.b2Head = new QueueNode<Page>();
     }
 
-
-    public void putCache(int key, Page value) {
+    /**
+     * Put page in cache
+     *
+     * @param key cache key
+     * @param page page to inset in cache
+     * @return void
+     */
+    public void putCache(int key, Page page) {
         QueueNode<Page> queueNode = queueNodeHashMap.get(key);
 
         if (queueNode == null) {
-            onMissOnT1orT2orB1orB2(key, value);
+            onMissOnAllQueue(key, page);
         } else if (queueNode.queueType == Constant.QueueType.B1) {
-            queueNode.setData(value);
+            queueNode.setData(page);
             onHitOnB1(queueNode);
         } else if (queueNode.queueType == Constant.QueueType.B2) {
-            queueNode.setData(value);
+            queueNode.setData(page);
             onHitOnB2(queueNode);
         } else {
-            queueNode.setData(value);
+            queueNode.setData(page);
             onHitOnT1orT2(queueNode);
         }
     }
 
-    private void onMissOnT1orT2orB1orB2(int key, Page value) {
-        QueueNode<Page> queueNode = new QueueNode<Page>(key, value);
+    /**
+     * Perform task on miss on all queue
+     *
+     * @param key cache key
+     * @param page page to inset in cache
+     * @return void
+     */
+    private void onMissOnAllQueue(int key, Page page) {
+        QueueNode<Page> queueNode = new QueueNode<Page>(key, page);
         queueNode.queueType = Constant.QueueType.T1;
 
         int sizeL1 = (t1Size + b1Size);
@@ -88,16 +101,12 @@ public class ARCAlgorithm {
         queueNode.addToLast(t1Head);
     }
 
-    private void onHitOnT1orT2(QueueNode queueNode) {
-        if (queueNode.queueType == Constant.QueueType.T1) {
-            t1Size--;
-            t2Size++;
-        }
-        queueNode.remove();
-        queueNode.queueType = Constant.QueueType.T2;
-        queueNode.addToLast(t2Head);
-    }
-
+    /**
+     * Perform task on miss on B1
+     *
+     * @param queueNode queue node
+     * @return void
+     */
     private void onHitOnB1(QueueNode queueNode) {
         adaptiveParameter = Math.min(maxSize, adaptiveParameter + Math.max(b2Size / b1Size, 1));
         replace(queueNode);
@@ -109,6 +118,12 @@ public class ARCAlgorithm {
         queueNode.addToLast(t2Head);
     }
 
+    /**
+     * Perform task on miss on B2
+     *
+     * @param queueNode queue node
+     * @return void
+     */
     private void onHitOnB2(QueueNode queueNode) {
         adaptiveParameter = Math.max(0, adaptiveParameter - Math.max(b1Size / b2Size, 1));
         replace(queueNode);
@@ -120,8 +135,30 @@ public class ARCAlgorithm {
         queueNode.addToLast(t2Head);
     }
 
-    private void replace(QueueNode candidate) {
-        if ((t1Size >= 1) && (((candidate.queueType == Constant.QueueType.B2) && (t1Size == adaptiveParameter)) || (t1Size > adaptiveParameter))) {
+    /**
+     * Perform task on hit on T1 or T2
+     *
+     * @param queueNode queue node
+     * @return void
+     */
+    private void onHitOnT1orT2(QueueNode queueNode) {
+        if (queueNode.queueType == Constant.QueueType.T1) {
+            t1Size--;
+            t2Size++;
+        }
+        queueNode.remove();
+        queueNode.queueType = Constant.QueueType.T2;
+        queueNode.addToLast(t2Head);
+    }
+
+    /**
+     * Replace QueueNode
+     *
+     * @param queueNode queue node
+     * @return void
+     */
+    private void replace(QueueNode queueNode) {
+        if ((t1Size >= 1) && (((queueNode.queueType == Constant.QueueType.B2) && (t1Size == adaptiveParameter)) || (t1Size > adaptiveParameter))) {
             QueueNode<Page> queueNodeToBeRemoved = t1Head.next;
             queueNodeToBeRemoved.remove();
             queueNodeToBeRemoved.queueType = Constant.QueueType.B1;
@@ -139,16 +176,27 @@ public class ARCAlgorithm {
 
     }
 
+    /**
+     * Remove data from queue
+     *
+     * @param queueNodeToBeRemoved queue node to be remove from queue
+     * @return void
+     */
     public void removeDataFromQueue(QueueNode<Page> queueNodeToBeRemoved) {
         queueNodeHashMap.remove(queueNodeToBeRemoved.key);
         Page data = queueNodeToBeRemoved.getData();
         try {
-            databaseConnection.saveUpdate(data);
+            databaseConnection.save(data);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Print all the existing key in cache
+     *
+     * @return void
+     */
     public void printCacheIdsFromQueue() {
         String keys = "";
         System.out.println("All Keys : ");

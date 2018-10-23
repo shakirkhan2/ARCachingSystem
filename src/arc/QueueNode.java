@@ -10,7 +10,7 @@ public class QueueNode<Page> {
     QueueNode prev;
     QueueNode next;
     Constant.QueueType queueType;
-    Page data;
+    Page page;
 
     QueueNode() {
         this.key = Integer.MIN_VALUE;
@@ -20,17 +20,34 @@ public class QueueNode<Page> {
 
     QueueNode(int key, Page data) {
         this.key = key;
-        this.data = data;
+        this.page = data;
     }
 
+    /**
+     * Get page data
+     *
+     * @return page
+     */
     public Page getData() {
-        return data;
+        return page;
     }
 
-    public void setData(Page data) {
-        this.data = data;
+    /**
+     * Set page data
+     *
+     * @param page page data
+     * @return void
+     */
+    public void setData(Page page) {
+        this.page = page;
     }
 
+    /**
+     * Add node to last
+     *
+     * @param head head of queue
+     * @return void
+     */
     public void addToLast(QueueNode head) {
         QueueNode tail = head.prev;
         head.prev = this;
@@ -39,6 +56,11 @@ public class QueueNode<Page> {
         prev = tail;
     }
 
+    /**
+     * Remove queue node
+     *
+     * @return void
+     */
     public void remove() {
         if (prev != null && next != null) {
             prev.next = next;
