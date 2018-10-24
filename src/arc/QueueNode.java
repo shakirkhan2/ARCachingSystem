@@ -28,7 +28,7 @@ public class QueueNode<Page> {
      *
      * @return page
      */
-    public Page getData() {
+    public Page getPage() {
         return page;
     }
 
@@ -38,12 +38,12 @@ public class QueueNode<Page> {
      * @param page page data
      * @return void
      */
-    public void setData(Page page) {
+    public void setPage(Page page) {
         this.page = page;
     }
 
     /**
-     * Add node to last
+     * Add node to last (append left)
      *
      * @param head head of queue
      * @return void

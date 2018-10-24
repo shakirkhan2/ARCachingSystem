@@ -5,10 +5,10 @@ package arc;
  */
 public class Constant {
     /**
-     * T1, for recent cache entries.
-     * T2, for frequent entries, referenced at least twice.
-     * B1, recently evicted from the T1 cache, but are still tracked.
-     * B2, similar evicted entries, but evicted from T2.
+     * T1, recent cache entries.
+     * T2, ghost entries recently evicted from the T1 cache.
+     * B1, frequent entries.
+     * B2, ghost entries recently evicted from the T2 cache.
      */
     public enum QueueType {
         T1, B1, T2, B2

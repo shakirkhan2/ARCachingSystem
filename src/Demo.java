@@ -29,6 +29,20 @@ public class Demo {
         Page page8 = new Page(8, 8);
 
         arc.putCache(page1.getPageId(), page1);
+        Page pageFromCache1 = arc.getCache(page1.getPageId());
+        if (pageFromCache1 != null) {
+            System.out.println("Page val from cache for key " + page1.getPageId() + " is " + pageFromCache1.getPageValue());
+        } else {
+            System.out.println(pageFromCache1);
+        }
+
+        Page pageFromCache2 = arc.getCache(6);
+        if (pageFromCache2 != null) {
+            System.out.println("Page val from cache for 6 is :" + pageFromCache2.getPageValue());
+        } else {
+            System.out.println("Page val from cache for 6 is " + pageFromCache2);
+        }
+
         arc.putCache(page2.getPageId(), page2);
         arc.putCache(page3.getPageId(), page3);
         arc.putCache(page4.getPageId(), page4);
